@@ -169,3 +169,209 @@ alert("Preview feature coming in Part 2 🚀");
 
 });
                             
+/*=========================================================
+  MemeVerse AI
+  JavaScript Part 2
+=========================================================*/
+
+/*=========================================
+  TOAST NOTIFICATION
+=========================================*/
+
+function showToast(message){
+
+let toast=document.createElement("div");
+
+toast.className="toast";
+
+toast.innerHTML=message;
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.classList.add("show");
+
+},100);
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+setTimeout(()=>{
+
+toast.remove();
+
+},400);
+
+},2500);
+
+}
+
+/*=========================================
+  RANDOM PROMPT BUTTON
+=========================================*/
+
+const randomPromptButton=document.querySelector("#randomPrompt");
+
+if(randomPromptButton){
+
+randomPromptButton.addEventListener("click",()=>{
+
+const random=
+
+prompts[Math.floor(Math.random()*prompts.length)];
+
+if(promptBox){
+
+promptBox.value=random;
+
+}
+
+showToast("🎲 Random prompt generated!");
+
+});
+
+}
+
+/*=========================================
+  COPY RESULT
+=========================================*/
+
+if(resultArea){
+
+resultArea.addEventListener("dblclick",()=>{
+
+const text=resultArea.innerText;
+
+navigator.clipboard.writeText(text);
+
+showToast("📋 Copied to clipboard!");
+
+});
+
+}
+
+/*=========================================
+  SEARCH
+=========================================*/
+
+if(searchInput){
+
+searchInput.addEventListener("keyup",()=>{
+
+const value=
+
+searchInput.value.toLowerCase();
+
+const cards=
+
+document.querySelectorAll(".template-card");
+
+cards.forEach(card=>{
+
+const text=
+
+card.innerText.toLowerCase();
+
+if(text.includes(value)){
+
+card.style.display="block";
+
+}else{
+
+card.style.display="none";
+
+}
+
+});
+
+});
+
+}
+
+if(searchButton){
+
+searchButton.addEventListener("click",()=>{
+
+showToast("🔍 Search completed");
+
+});
+
+}
+
+/*=========================================
+  FAVORITES
+=========================================*/
+
+let favorites=[];
+
+generateButtons.forEach(button=>{
+
+button.addEventListener("contextmenu",(e)=>{
+
+e.preventDefault();
+
+const card=
+
+button.closest(".template-card");
+
+if(!card) return;
+
+const title=
+
+card.querySelector("h3").innerText;
+
+favorites.push(title);
+
+localStorage.setItem(
+
+"favorites",
+
+JSON.stringify(favorites)
+
+);
+
+showToast("❤️ Added to Favorites");
+
+});
+
+});
+
+/*=========================================
+  LOAD FAVORITES
+=========================================*/
+
+const saved=
+
+localStorage.getItem("favorites");
+
+if(saved){
+
+favorites=
+
+JSON.parse(saved);
+
+console.log(favorites);
+
+}
+
+/*=========================================
+  KEYBOARD SHORTCUT
+=========================================*/
+
+document.addEventListener("keydown",(e)=>{
+
+if(
+
+e.ctrlKey &&
+
+e.key==="Enter"
+
+){
+
+generateMeme();
+
+}
+
+});
