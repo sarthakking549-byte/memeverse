@@ -708,4 +708,4 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ MemeVerse AI Loaded Successfully");
 
 });
-});
+
