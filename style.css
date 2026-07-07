@@ -1140,3 +1140,122 @@ color:white;
 transform:translateY(-3px);
 
 }
+/* ======================================================
+   CATEGORIES SECTION
+====================================================== */
+
+.categories{
+
+max-width:1400px;
+
+margin:auto;
+
+padding:90px 40px;
+
+}
+
+.section-title{
+
+text-align:center;
+
+margin-bottom:60px;
+
+}
+
+.section-title h2{
+
+font-size:48px;
+
+margin-bottom:15px;
+
+}
+
+.section-title p{
+
+font-size:18px;
+
+color:#cbd5e1;
+
+max-width:700px;
+
+margin:auto;
+
+line-height:1.8;
+
+}
+
+.category-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:25px;
+
+}
+
+.category-card{
+
+padding:35px 25px;
+
+text-align:center;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.08);
+
+border-radius:22px;
+
+transition:.35s;
+
+backdrop-filter:blur(15px);
+
+}
+
+.category-card:hover{
+
+transform:translateY(-10px);
+
+box-shadow:0 20px 45px rgba(0,229,255,.20);
+
+}
+
+.category-icon{
+
+font-size:60px;
+
+margin-bottom:20px;
+
+transition:.35s;
+
+}
+
+.category-card:hover .category-icon{
+
+transform:scale(1.15) rotate(10deg);
+
+}
+
+.category-card h3{
+
+font-size:26px;
+
+margin-bottom:10px;
+
+}
+
+.category-card p{
+
+color:#cbd5e1;
+
+line-height:1.7;
+
+}
+
+/* ======================================================
+   AI GENERATOR
+====================================================== */
+
+.generator{
+
+padding:
