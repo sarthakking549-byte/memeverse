@@ -569,3 +569,180 @@ MemeVerse.start=function(){
     console.log("✅ Favorites Ready");
 
 };
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 4 - Navigation & UI
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    initNavbar(){
+
+        const header=this.elements.header;
+
+        if(!header) return;
+
+        window.addEventListener("scroll",()=>{
+
+            if(window.scrollY>80){
+
+                header.classList.add("scrolled");
+
+            }else{
+
+                header.classList.remove("scrolled");
+
+            }
+
+        });
+
+    },
+
+    initMobileMenu(){
+
+        const menu=document.querySelector(".menu-toggle");
+
+        const nav=document.querySelector(".nav-menu");
+
+        if(!menu || !nav) return;
+
+        menu.addEventListener("click",()=>{
+
+            nav.classList.toggle("active");
+
+            menu.classList.toggle("active");
+
+        });
+
+    },
+
+    smoothScroll(){
+
+        document.querySelectorAll('a[href^="#"]').forEach(link=>{
+
+            link.addEventListener("click",(e)=>{
+
+                const id=link.getAttribute("href");
+
+                if(id==="#") return;
+
+                const target=document.querySelector(id);
+
+                if(!target) return;
+
+                e.preventDefault();
+
+                target.scrollIntoView({
+
+                    behavior:"smooth",
+
+                    block:"start"
+
+                });
+
+            });
+
+        });
+
+    },
+
+    createBackToTop(){
+
+        const button=document.createElement("button");
+
+        button.id="backToTop";
+
+        button.innerHTML="⬆";
+
+        document.body.appendChild(button);
+
+        window.addEventListener("scroll",()=>{
+
+            if(window.scrollY>500){
+
+                button.classList.add("show");
+
+            }else{
+
+                button.classList.remove("show");
+
+            }
+
+        });
+
+        button.addEventListener("click",()=>{
+
+            window.scrollTo({
+
+                top:0,
+
+                behavior:"smooth"
+
+            });
+
+        });
+
+    },
+
+    rippleEffect(){
+
+        document.querySelectorAll("button").forEach(btn=>{
+
+            btn.addEventListener("click",(e)=>{
+
+                const ripple=document.createElement("span");
+
+                ripple.className="mv-ripple";
+
+                const rect=btn.getBoundingClientRect();
+
+                const size=Math.max(rect.width,rect.height);
+
+                ripple.style.width=size+"px";
+
+                ripple.style.height=size+"px";
+
+                ripple.style.left=(e.clientX-rect.left-size/2)+"px";
+
+                ripple.style.top=(e.clientY-rect.top-size/2)+"px";
+
+                btn.appendChild(ripple);
+
+                setTimeout(()=>{
+
+                    ripple.remove();
+
+                },600);
+
+            });
+
+        });
+
+    }
+
+});
+
+/*=========================================
+    EXTEND STARTUP AGAIN
+=========================================*/
+
+const previousStart=MemeVerse.start.bind(MemeVerse);
+
+MemeVerse.start=function(){
+
+    previousStart();
+
+    this.initNavbar();
+
+    this.initMobileMenu();
+
+    this.smoothScroll();
+
+    this.createBackToTop();
+
+    this.rippleEffect();
+
+    console.log("✅ Navigation Ready");
+
+};
