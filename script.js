@@ -957,3 +957,380 @@
    Awaiting Part 3 Query Processor Directives...
    ============================================================================ */
 
+/**
+ * ============================================================================
+ * MemeVerse AI - Premium Enterprise Application Core Script
+ * Module 3: Template Query Indexer, Category Router & Virtual Pagination
+ * System Clock Reference: 2026
+ * ============================================================================
+ */
+
+(function (global) {
+    'use strict';
+
+    // Ensure safe namespace extraction
+    const MV_APP = global.MV_APP || {};
+    if (!MV_APP.UI) MV_APP.UI = {};
+
+    /**
+     * ------------------------------------------------------------------------
+     * TEMPLATE CENTRAL DATA STRUCTURE & IN-MEMORY CACHE INDEX
+     * ------------------------------------------------------------------------
+     */
+    MV_APP.UI.SearchIndexer = {
+        config: {
+            searchFieldSelector: '#searchInput',
+            searchTriggerButtonSelector: '.search-box button',
+            templateCardSelector: '.template-card',
+            categoryCardSelector: '.category-card',
+            containerSectionSelector: '#templates .templates-grid, .explore-grid',
+            activeFilterClass: 'active-filter'
+        },
+
+        // Core dataset for advanced client-side querying optimizations
+        inMemoryIndex: [],
+        itemsPerPage: 6,
+        currentPage: 1,
+
+        init: function () {
+            MV_APP.Utils.logDebug("Compiling Virtual Layout Memory Index arrays...", "info");
+            this.buildClientSideSearchIndex();
+            this.bindQueryExecutionListeners();
+            this.bindCategoryCardInteractions();
+            this.injectPaginationControlsMarkup();
+        },
+
+        /**
+         * Parses the existing DOM elements on the website to populate a fast in-memory search catalog
+         */
+        buildClientSideSearchIndex: function () {
+            const compiledDOMCards = document.querySelectorAll(this.config.templateCardSelector);
+            this.inMemoryIndex = []; // Reset structure
+
+            if (compiledDOMCards.length === 0) {
+                MV_APP.Utils.logDebug("No template card targets detected inside DOM scope during index parsing.", "warn");
+                return;
+            }
+
+            compiledDOMCards.forEach((cardNode, sequentialIndex) => {
+                const textHeaderElement = cardNode.querySelector('h3');
+                const descriptionParagraphElement = cardNode.querySelector('p');
+                
+                const titleText = textHeaderElement ? textHeaderElement.textContent.trim() : "Untitled Template";
+                const descriptionText = descriptionParagraphElement ? descriptionParagraphElement.textContent.trim() : "";
+                
+                // Extract implicit tags from inner layout text signatures or data-attributes
+                let determinedCategory = "all";
+                const lowerTitle = titleText.toLowerCase();
+                const lowerDesc = descriptionText.toLowerCase();
+
+                if (lowerTitle.includes("cat") || lowerDesc.includes("cat") || lowerDesc.includes("dog") || lowerDesc.includes("animal")) {
+                    determinedCategory = "pets";
+                } else if (lowerTitle.includes("office") || lowerTitle.includes("work") || lowerDesc.includes("corporate") || lowerDesc.includes("meeting")) {
+                    determinedCategory = "office";
+                } else if (lowerTitle.includes("student") || lowerDesc.includes("exam") || lowerDesc.includes("school") || lowerDesc.includes("study")) {
+                    determinedCategory = "school";
+                } else if (lowerTitle.includes("gamer") || lowerDesc.includes("game") || lowerDesc.includes("playstation")) {
+                    determinedCategory = "gaming";
+                }
+
+                // Add references to the memory tracking index array
+                this.inMemoryIndex.push({
+                    domReference: cardNode,
+                    indexId: sequentialIndex,
+                    title: titleText,
+                    description: descriptionText,
+                    category: determinedCategory,
+                    normalizedSearchString: `${titleText.toLowerCase()} ${descriptionText.toLowerCase()} ${determinedCategory}`
+                });
+            });
+
+            MV_APP.Utils.logDebug(`Successfully indexed ${this.inMemoryIndex.length} native template cards inside client memory storage layout.`, "info");
+        },
+
+        /**
+         * Setup real-time input listeners to catch keystrokes and perform live search filtering
+         */
+        bindQueryExecutionListeners: function () {
+            const queryInputField = document.querySelector(this.config.searchFieldSelector);
+            const actionButtonTrigger = document.querySelector(this.config.searchTriggerButtonSelector);
+
+            if (queryInputField) {
+                // Live query matching processing via optimized debouncing intervals
+                queryInputField.addEventListener('input', MV_APP.Utils.debounce(() => {
+                    this.currentPage = 1; // Re-index pagination frame bounds upon text mutation
+                    this.executeClientSearchFilterPipeline();
+                }, 200));
+
+                // Prevent standard submission behavior if integrated with form layouts
+                queryInputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.currentPage = 1;
+                        this.executeClientSearchFilterPipeline();
+                    }
+                });
+            }
+
+            if (actionButtonTrigger) {
+                actionButtonTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.currentPage = 1;
+                    this.executeClientSearchFilterPipeline();
+                });
+            }
+        },
+
+        /**
+         * Connects explore category blocks directly to search conditions automatically
+         */
+        bindCategoryCardInteractions: function () {
+            const categoryBoxes = document.querySelectorAll(this.config.categoryCardSelector);
+            
+            categoryBoxes.forEach(boxNode => {
+                boxNode.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    const internalHeaderNode = boxNode.querySelector('h3');
+                    if (!internalHeaderNode) return;
+
+                    const rawCategoryLabel = internalHeaderNode.textContent.trim().toLowerCase();
+                    let computedCategoryKey = "all";
+
+                    // Map UI names to internal structural tags
+                    if (rawCategoryLabel.includes("trending") || rawCategoryLabel.includes("popular")) computedCategoryKey = "all";
+                    else if (rawCategoryLabel.includes("gaming") || rawCategoryLabel.includes("gamer")) computedCategoryKey = "gaming";
+                    else if (rawCategoryLabel.includes("office") || rawCategoryLabel.includes("work")) computedCategoryKey = "office";
+                    else if (rawCategoryLabel.includes("school") || rawCategoryLabel.includes("exam")) computedCategoryKey = "school";
+                    else if (rawCategoryLabel.includes("pets") || rawCategoryLabel.includes("animal")) computedCategoryKey = "pets";
+
+                    // Track active queries within global context sets
+                    MV_APP.State.activeFilters.clear();
+                    if (computedCategoryKey !== "all") {
+                        MV_APP.State.activeFilters.add(computedCategoryKey);
+                    }
+
+                    // Highlight selection states visually
+                    categoryBoxes.forEach(b => b.style.border = '');
+                    boxNode.style.border = '2px solid var(--accent)';
+
+                    // Sync the main search field to guide the user's focus
+                    const mainSearchBox = document.querySelector(this.config.searchFieldSelector);
+                    if (mainSearchBox && computedCategoryKey !== "all") {
+                        mainSearchBox.value = rawCategoryLabel;
+                    } else if (mainSearchBox) {
+                        mainSearchBox.value = '';
+                    }
+
+                    this.currentPage = 1;
+                    this.executeClientSearchFilterPipeline();
+
+                    // Smooth scroll directly down to the template gallery results section
+                    const galleryAnchorNode = document.querySelector('#templates');
+                    if (galleryAnchorNode) {
+                        const topCoordinate = galleryAnchorNode.getBoundingClientRect().top + window.pageYOffset - 90;
+                        window.scrollTo({ top: topCoordinate, behavior: 'smooth' });
+                    }
+                });
+            });
+        },
+
+        /**
+         * Core processing loop matching in-memory objects against user-selected filter criteria
+         */
+        executeClientSearchFilterPipeline: function () {
+            const searchField = document.querySelector(this.config.searchFieldSelector);
+            const userSearchPhrase = searchField ? searchField.value.toLowerCase().trim() : "";
+            
+            let filteredResultsMatchList = [];
+
+            this.inMemoryIndex.forEach(itemRecord => {
+                const matchesTextQuery = userSearchPhrase === "" || itemRecord.normalizedSearchString.includes(userSearchPhrase);
+                const matchesActiveCategory = MV_APP.State.activeFilters.size === 0 || MV_APP.State.activeFilters.has(itemRecord.category);
+
+                if (matchesTextQuery && matchesActiveCategory) {
+                    filteredResultsMatchList.push(itemRecord);
+                    itemRecord.domReference.classList.remove('hidden');
+                } else {
+                    itemRecord.domReference.classList.add('hidden');
+                    itemRecord.domReference.style.display = 'none';
+                }
+            });
+
+            // Hand over filtered array slices to virtualization pagination render loops
+            this.renderPaginatedInterfaceMatrix(filteredResultsMatchList);
+        },
+
+        /**
+         * Injects dynamic navigation mechanics below your template lists
+         */
+        injectPaginationControlsMarkup: function () {
+            const sectionTarget = document.querySelector('#templates');
+            if (!sectionTarget) return;
+
+            let checkExistingContainer = document.getElementById('mv-pagination-wrapper-block');
+            if (!checkExistingContainer) {
+                checkExistingContainer = document.createElement('div');
+                checkExistingContainer.id = 'mv-pagination-wrapper-block';
+                Object.assign(checkExistingContainer.style, {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '15px',
+                    marginTop: '40px',
+                    width: '100%'
+                });
+                sectionTarget.appendChild(checkExistingContainer);
+            }
+
+            this.executeClientSearchFilterPipeline();
+        },
+
+        /**
+         * Controls layout item visibility to display accurate, limited row pages cleanly
+         */
+        renderPaginatedInterfaceMatrix: function (activeItemsList) {
+            const paginationContainerNode = document.getElementById('mv-pagination-wrapper-block');
+            if (!paginationContainerNode) return;
+
+            const totalItemCount = activeItemsList.length;
+            const maximumPagesAvailable = Math.max(1, Math.ceil(totalItemCount / this.itemsPerPage));
+
+            // Prevent indexing overflow boundaries gracefully
+            if (this.currentPage > maximumPagesAvailable) {
+                this.currentPage = maximumPagesAvailable;
+            }
+
+            const zeroBasedStartIndex = (this.currentPage - 1) * this.itemsPerPage;
+            const absoluteEndingIndex = zeroBasedStartIndex + this.itemsPerPage;
+
+            // Process visibility states based on computed window slices
+            this.inMemoryIndex.forEach(element => {
+                element.domReference.style.display = 'none';
+            });
+
+            const visibleSlice = activeItemsList.slice(zeroBasedStartIndex, absoluteEndingIndex);
+            
+            if (visibleSlice.length === 0) {
+                this.renderEmptyResultsWarningMessage();
+                paginationContainerNode.innerHTML = '';
+                return;
+            } else {
+                this.removeEmptyResultsWarningMessage();
+            }
+
+            visibleSlice.forEach(visibleItem => {
+                visibleItem.domReference.style.display = 'block';
+                visibleItem.domReference.style.animation = 'scale-in 0.35s ease forwards';
+            });
+
+            // Rebuild pagination dynamic button maps
+            this.rebuildPaginationButtonMapLayout(paginationContainerNode, maximumPagesAvailable);
+        },
+
+        rebuildPaginationButtonMapLayout: function (containerNode, maxPages) {
+            let innerButtonsMarkup = `
+                <button class="secondary-btn" id="mv-pag-prev-node" style="padding:8px 16px; font-size:13px;" ${this.currentPage === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+                    <i class="fa-solid fa-arrow-left"></i> Prev
+                </button>
+            `;
+
+            for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+                const isCurrentPage = pageNum === this.currentPage;
+                innerButtonsMarkup += `
+                    <button class="${isCurrentPage ? 'primary-btn' : 'secondary-btn'}" data-page-target="${pageNum}" style="padding: 8px 14px; font-size:13px; min-width:38px; border:${isCurrentPage ? 'none' : '1px solid rgba(255,255,255,0.1)'}">
+                        ${pageNum}
+                    </button>
+                `;
+            }
+
+            innerButtonsMarkup += `
+                <button class="secondary-btn" id="mv-pag-next-node" style="padding:8px 16px; font-size:13px;" ${this.currentPage === maxPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+                    Next <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            `;
+
+            containerNode.innerHTML = innerButtonsMarkup;
+
+            // Bind page-switching logic to the generated button loops
+            this.bindPaginationActionTriggers(containerNode);
+        },
+
+        bindPaginationActionTriggers: function (containerNode) {
+            const previousBtn = document.getElementById('mv-pag-prev-node');
+            const nextBtn = document.getElementById('mv-pag-next-node');
+            const numericPageBtns = containerNode.querySelectorAll('button[data-page-target]');
+
+            if (previousBtn && this.currentPage > 1) {
+                previousBtn.addEventListener('click', () => {
+                    this.currentPage--;
+                    this.executeClientSearchFilterPipeline();
+                });
+            }
+
+            if (nextBtn) {
+                // Extract maximum valid page directly from data structures
+                const currentSearchField = document.querySelector(this.config.searchFieldSelector);
+                const currentVal = currentSearchField ? currentSearchField.value.toLowerCase().trim() : "";
+                const matchedCount = this.inMemoryIndex.filter(i => currentVal === "" || i.normalizedSearchString.includes(currentVal)).length;
+                const maximumPagesAvailable = Math.ceil(matchedCount / this.itemsPerPage);
+
+                if (this.currentPage < maximumPagesAvailable) {
+                    nextBtn.addEventListener('click', () => {
+                        this.currentPage++;
+                        this.executeClientSearchFilterPipeline();
+                    });
+                }
+            }
+
+            numericPageBtns.forEach(btnNode => {
+                btnNode.addEventListener('click', () => {
+                    this.currentPage = parseInt(btnNode.getAttribute('data-page-target'), 10);
+                    this.executeClientSearchFilterPipeline();
+                });
+            });
+        },
+
+        renderEmptyResultsWarningMessage: function () {
+            this.removeEmptyResultsWarningMessage(); // Prevent duplicate injection loops
+            
+            const gridTargetContainer = document.querySelector('.templates-grid');
+            if (!gridTargetContainer) return;
+
+            const emptyNoticeNode = document.createElement('div');
+            emptyNoticeNode.id = 'mv-search-empty-fallback-notice';
+            emptyNoticeNode.className = 'glass';
+            Object.assign(emptyNoticeNode.style, {
+                padding: '60px 20px',
+                textAlign: 'center',
+                gridColumn: '1 / -1',
+                borderRadius: 'var(--radius)',
+                width: '100%'
+            });
+
+            emptyNoticeNode.innerHTML = `
+                <i class="fa-solid fa-magnifying-glass-blur" style="font-size:48px; color:var(--secondary); margin-bottom:15px; display:block;"></i>
+                <h3 style="color:#ffffff; margin-bottom:8px; font-size:20px;">No Matching Templates Found</h3>
+                <p style="color:var(--gray); font-size:14px; max-width:420px; margin:0 auto; line-height:1.6;">
+                    We couldn't locate any records containing those terms. Try adjusting your search query or choosing another category block.
+                </p>
+            `;
+            gridTargetContainer.parentNode.insertBefore(emptyNoticeNode, gridTargetContainer.nextSibling);
+        },
+
+        removeEmptyResultsWarningMessage: function () {
+            const targetNoticeNode = document.getElementById('mv-search-empty-fallback-notice');
+            if (targetNoticeNode) targetNoticeNode.remove();
+        }
+    };
+
+    // Safe global registration pipeline tracking
+    global.MV_APP = MV_APP;
+
+})(window);
+
+/* ============================================================================
+   End of Part 3 - Search Indexer & Pagination Router
+   Awaiting Part 4 State Management Directives...
+   ============================================================================ */
+                
