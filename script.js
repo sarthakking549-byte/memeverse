@@ -195,3 +195,167 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+/* =====================================================
+   MemeVerse AI
+   script.js - Part 2
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* -------------------------------
+       Fade Animation on Scroll
+    -------------------------------- */
+
+    const fadeElements=document.querySelectorAll(
+
+        ".template-card,.category-card,.feature-card,.trend-card,.faq-item,.about-box,.stat-box"
+
+    );
+
+    const observer=new IntersectionObserver((entries)=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+            }
+
+        });
+
+    },{
+
+        threshold:0.2
+
+    });
+
+    fadeElements.forEach(el=>{
+
+        el.classList.add("fade-up");
+
+        observer.observe(el);
+
+    });
+
+    /* -------------------------------
+       Like Button
+    -------------------------------- */
+
+    document.querySelectorAll(".generate-btn").forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            btn.innerHTML="❤️ Liked";
+
+            btn.style.background="#ef4444";
+
+        });
+
+    });
+
+    /* -------------------------------
+       Preview Buttons
+    -------------------------------- */
+
+    document.querySelectorAll(".preview-btn").forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            alert("Preview feature will be available in the next version.");
+
+        });
+
+    });
+
+    /* -------------------------------
+       Join Community
+    -------------------------------- */
+
+    const joinBtn=document.querySelector(".join-btn");
+
+    if(joinBtn){
+
+        joinBtn.addEventListener("click",()=>{
+
+            alert("🎉 Thanks for joining MemeVerse AI!");
+
+        });
+
+    }
+
+    /* -------------------------------
+       Newsletter
+    -------------------------------- */
+
+    document.querySelectorAll(".newsletter-box button,.footer-btn")
+
+    .forEach(button=>{
+
+        button.addEventListener("click",()=>{
+
+            alert("✅ Subscription successful!");
+
+        });
+
+    });
+
+    /* -------------------------------
+       Contact Form
+    -------------------------------- */
+
+    const form=document.querySelector(".contact-form form");
+
+    if(form){
+
+        form.addEventListener("submit",(e)=>{
+
+            e.preventDefault();
+
+            alert("📩 Message sent successfully!");
+
+            form.reset();
+
+        });
+
+    }
+
+    /* -------------------------------
+       Copy AI Result
+    -------------------------------- */
+
+    resultArea.addEventListener("dblclick",()=>{
+
+        const text=resultArea.innerText;
+
+        navigator.clipboard.writeText(text);
+
+        alert("📋 Copied!");
+
+    });
+
+    /* -------------------------------
+       Hero Button Animation
+    -------------------------------- */
+
+    document.querySelectorAll(
+
+        ".primary-btn,.secondary-btn"
+
+    ).forEach(btn=>{
+
+        btn.addEventListener("mouseenter",()=>{
+
+            btn.style.transform="scale(1.05)";
+
+        });
+
+        btn.addEventListener("mouseleave",()=>{
+
+            btn.style.transform="scale(1)";
+
+        });
+
+    });
+
+});
