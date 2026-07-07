@@ -746,3 +746,186 @@ MemeVerse.start=function(){
     console.log("✅ Navigation Ready");
 
 };
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 5 - Dark Mode & Animations
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    initDarkMode(){
+
+        let darkButton=document.querySelector("#darkModeBtn");
+
+        if(!darkButton){
+
+            darkButton=document.createElement("button");
+
+            darkButton.id="darkModeBtn";
+
+            darkButton.innerHTML="🌙";
+
+            document.body.appendChild(darkButton);
+
+        }
+
+        const saved=localStorage.getItem("mv_theme");
+
+        if(saved==="dark"){
+
+            document.body.classList.add("dark-mode");
+
+            darkButton.innerHTML="☀️";
+
+        }
+
+        darkButton.addEventListener("click",()=>{
+
+            document.body.classList.toggle("dark-mode");
+
+            const dark=document.body.classList.contains("dark-mode");
+
+            localStorage.setItem(
+
+                "mv_theme",
+
+                dark?"dark":"light"
+
+            );
+
+            darkButton.innerHTML=
+
+            dark?"☀️":"🌙";
+
+            this.toast(
+
+                dark?
+
+                "🌙 Dark Mode Enabled":
+
+                "☀️ Light Mode Enabled"
+
+            );
+
+        });
+
+    },
+
+    revealOnScroll(){
+
+        const items=document.querySelectorAll(
+
+            ".template-card,.category-card,.feature-card,.trend-card,.about-box,.faq-item,.contact-wrapper,.community-content"
+
+        );
+
+        const observer=new IntersectionObserver(
+
+            entries=>{
+
+                entries.forEach(entry=>{
+
+                    if(entry.isIntersecting){
+
+                        entry.target.classList.add("reveal");
+
+                    }
+
+                });
+
+            },
+
+            {
+
+                threshold:0.15
+
+            }
+
+        );
+
+        items.forEach(item=>{
+
+            observer.observe(item);
+
+        });
+
+    },
+
+    keyboardShortcuts(){
+
+        document.addEventListener("keydown",(e)=>{
+
+            if(e.ctrlKey && e.key==="Enter"){
+
+                this.generate();
+
+            }
+
+            if(e.key==="Escape"){
+
+                if(this.elements.promptBox){
+
+                    this.elements.promptBox.value="";
+
+                }
+
+            }
+
+        });
+
+    },
+
+    sessionCounter(){
+
+        let visits=
+
+        Number(
+
+            localStorage.getItem("mv_visits")||0
+
+        );
+
+        visits++;
+
+        localStorage.setItem(
+
+            "mv_visits",
+
+            visits
+
+        );
+
+        console.log(
+
+            "Visits:",
+
+            visits
+
+        );
+
+    }
+
+});
+
+/*=========================================
+    EXTEND STARTUP
+=========================================*/
+
+const startV5=MemeVerse.start.bind(MemeVerse);
+
+MemeVerse.start=function(){
+
+    startV5();
+
+    this.initDarkMode();
+
+    this.revealOnScroll();
+
+    this.keyboardShortcuts();
+
+    this.sessionCounter();
+
+    console.log("✅ UI Enhancements Ready");
+
+};
