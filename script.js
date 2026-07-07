@@ -359,3 +359,175 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+/* =====================================================
+   MemeVerse AI
+   script.js - Part 3
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* -------------------------------
+       Back To Top Button
+    -------------------------------- */
+
+    const topBtn = document.createElement("button");
+
+    topBtn.innerHTML = "⬆";
+
+    topBtn.className = "back-to-top";
+
+    document.body.appendChild(topBtn);
+
+    topBtn.style.cssText = `
+        position:fixed;
+        bottom:30px;
+        right:30px;
+        width:55px;
+        height:55px;
+        border-radius:50%;
+        border:none;
+        background:linear-gradient(135deg,#6C63FF,#00E5FF);
+        color:white;
+        font-size:22px;
+        cursor:pointer;
+        display:none;
+        z-index:9999;
+        box-shadow:0 15px 35px rgba(0,0,0,.3);
+        transition:.3s;
+    `;
+
+    window.addEventListener("scroll",()=>{
+
+        if(window.scrollY>400){
+
+            topBtn.style.display="block";
+
+        }else{
+
+            topBtn.style.display="none";
+
+        }
+
+    });
+
+    topBtn.addEventListener("click",()=>{
+
+        window.scrollTo({
+
+            top:0,
+
+            behavior:"smooth"
+
+        });
+
+    });
+
+    /* -------------------------------
+       Animated Counters
+    -------------------------------- */
+
+    const counters=document.querySelectorAll(".stat-box h2");
+
+    counters.forEach(counter=>{
+
+        const target=parseInt(counter.innerText.replace(/\D/g,''))||100;
+
+        let count=0;
+
+        const update=()=>{
+
+            count+=Math.ceil(target/60);
+
+            if(count<target){
+
+                counter.innerText=count+"+";
+
+                requestAnimationFrame(update);
+
+            }else{
+
+                counter.innerText=target+"+";
+
+            }
+
+        };
+
+        update();
+
+    });
+
+    /* -------------------------------
+       Share Meme Result
+    -------------------------------- */
+
+    const shareBtn=document.createElement("button");
+
+    shareBtn.textContent="📤 Share";
+
+    shareBtn.style.marginTop="20px";
+
+    shareBtn.style.padding="12px 24px";
+
+    shareBtn.style.borderRadius="40px";
+
+    shareBtn.style.background="linear-gradient(135deg,#6C63FF,#00E5FF)";
+
+    shareBtn.style.color="white";
+
+    if(resultArea){
+
+        resultArea.appendChild(shareBtn);
+
+    }
+
+    shareBtn.addEventListener("click",()=>{
+
+        if(navigator.share){
+
+            navigator.share({
+
+                title:"MemeVerse AI",
+
+                text:resultArea.innerText,
+
+                url:window.location.href
+
+            });
+
+        }else{
+
+            alert("Sharing is not supported on this browser.");
+
+        }
+
+    });
+
+    /* -------------------------------
+       Keyboard Shortcut
+    -------------------------------- */
+
+    document.addEventListener("keydown",(e)=>{
+
+        if(e.ctrlKey && e.key==="Enter"){
+
+            if(generateBtn){
+
+                generateBtn.click();
+
+            }
+
+        }
+
+    });
+
+    /* -------------------------------
+       Welcome Message
+    -------------------------------- */
+
+    setTimeout(()=>{
+
+        console.log("🚀 Welcome to MemeVerse AI!");
+
+    },1000);
+
+});
