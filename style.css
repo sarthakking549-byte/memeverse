@@ -1537,3 +1537,378 @@ padding:30px 20px;
 .templates h2,
 .section-title h2,
 .community-content h2,
+/* ======================================================
+   RESPONSIVE DESIGN
+====================================================== */
+
+@media (max-width:1200px){
+
+.hero,
+.about,
+.contact-wrapper{
+
+grid-template-columns:1fr;
+
+gap:40px;
+
+}
+
+.hero{
+
+text-align:center;
+
+}
+
+.hero-buttons{
+
+justify-content:center;
+
+}
+
+.hero-card{
+
+margin:auto;
+
+}
+
+.about-right{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media (max-width:992px){
+
+.navbar{
+
+padding:18px 25px;
+
+}
+
+.template-grid,
+.category-grid,
+.trending-grid,
+.features-grid,
+.community-stats{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+.footer-container{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media (max-width:768px){
+
+.hero{
+
+padding:70px 20px;
+
+}
+
+.hero-left h1{
+
+font-size:42px;
+
+}
+
+.hero-left p{
+
+font-size:17px;
+
+}
+
+.templates,
+.categories,
+.trending,
+.features,
+.about,
+.contact{
+
+padding:70px 20px;
+
+}
+
+.template-grid,
+.category-grid,
+.trending-grid,
+.features-grid,
+.community-stats,
+.about-right,
+.footer-container{
+
+grid-template-columns:1fr;
+
+}
+
+.search-container,
+.generator-container,
+.newsletter-content,
+.community-content{
+
+padding:35px 25px;
+
+}
+
+.section-title h2{
+
+font-size:36px;
+
+}
+
+}
+
+@media (max-width:480px){
+
+.logo h2{
+
+font-size:20px;
+
+}
+
+.hero-left h1{
+
+font-size:34px;
+
+}
+
+.hero-left p{
+
+font-size:16px;
+
+}
+
+.primary-btn,
+.secondary-btn,
+#generateBtn,
+#randomPrompt,
+.join-btn,
+.footer-btn,
+.contact-form button{
+
+width:100%;
+
+}
+
+.search-box{
+
+flex-direction:column;
+
+}
+
+.search-box input,
+.search-box button{
+
+width:100%;
+
+}
+
+.newsletter-box{
+
+flex-direction:column;
+
+}
+
+.newsletter-box input,
+.newsletter-box button{
+
+width:100%;
+
+}
+
+.social-icons a{
+
+width:55px;
+
+height:55px;
+
+font-size:22px;
+
+}
+
+}
+
+/* ======================================================
+   SMOOTH ANIMATIONS
+====================================================== */
+
+.fade-up{
+
+opacity:0;
+
+transform:translateY(40px);
+
+transition:.8s ease;
+
+}
+
+.fade-up.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+.scale-in{
+
+opacity:0;
+
+transform:scale(.9);
+
+transition:.6s ease;
+
+}
+
+.scale-in.show{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+/* ======================================================
+   HOVER EFFECTS
+====================================================== */
+
+.template-card,
+.category-card,
+.feature-card,
+.about-box,
+.trend-card,
+.stat-box{
+
+transition:.35s ease;
+
+}
+
+.template-card:hover,
+.category-card:hover,
+.feature-card:hover,
+.about-box:hover,
+.trend-card:hover,
+.stat-box:hover{
+
+transform:translateY(-10px);
+
+}
+
+/* ======================================================
+   LOADING ANIMATION
+====================================================== */
+
+.loading{
+
+display:inline-block;
+
+width:22px;
+
+height:22px;
+
+border:3px solid rgba(255,255,255,.3);
+
+border-top:3px solid var(--accent);
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+0%{
+
+transform:rotate(0deg);
+
+}
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* ======================================================
+   UTILITY CLASSES
+====================================================== */
+
+.text-center{
+
+text-align:center;
+
+}
+
+.mt-20{
+
+margin-top:20px;
+
+}
+
+.mt-40{
+
+margin-top:40px;
+
+}
+
+.mb-20{
+
+margin-bottom:20px;
+
+}
+
+.mb-40{
+
+margin-bottom:40px;
+
+}
+
+.hidden{
+
+display:none;
+
+}
+
+.show{
+
+display:block;
+
+}
+
+.glass{
+
+background:rgba(255,255,255,.06);
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,.08);
+
+border-radius:20px;
+
+}
+
+.gradient-text{
+
+background:linear-gradient(90deg,#00E5FF,#8B5CF6,#6C63FF);
+
+-webkit-background-clip:text;
+
+-webkit-text-fill-color:transparent;
+
+}
+
+.shadow{
+
+box-shadow:0 20px 45px rgba(0,0,0,.25);
+
+}
