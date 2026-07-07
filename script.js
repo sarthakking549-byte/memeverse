@@ -1334,3 +1334,308 @@
    Awaiting Part 4 State Management Directives...
    ============================================================================ */
                 
+/**
+ * ============================================================================
+ * MemeVerse AI - Premium Enterprise Application Core Script
+ * Module 4: Persistent State Manager, LocalStorage Engine & Canvas Workflow
+ * System Clock Reference: 2026
+ * ============================================================================
+ */
+
+(function (global) {
+    'use strict';
+
+    // Ensure safe namespace extraction
+    const MV_APP = global.MV_APP || {};
+    if (!MV_APP.Storage) MV_APP.Storage = {};
+    if (!MV_APP.Engine) MV_APP.Engine = {};
+
+    /**
+     * ------------------------------------------------------------------------
+     * LOCAL STORAGE & PERSISTENCE ENGINE
+     * ------------------------------------------------------------------------
+     */
+    MV_APP.Storage.CacheManager = {
+        config: {
+            storageKeyPrefix: 'mv_ai_studio_',
+            favoritesKey: 'user_favorites',
+            historyMaxDepth: 15
+        },
+
+        /**
+         * Verifies availability of LocalStorage within the user client environment
+         */
+        isLocalStorageAvailable: function () {
+            try {
+                const dummyKey = '__mv_storage_test__';
+                localStorage.setItem(dummyKey, dummyKey);
+                localStorage.removeItem(dummyKey);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
+
+        /**
+         * Persists any object state mapping directly into client memory cache
+         */
+        saveState: function (key, dataPayload) {
+            if (!this.isLocalStorageAvailable()) return false;
+            try {
+                const completeKey = this.config.storageKeyPrefix + key;
+                const serializedData = JSON.stringify(dataPayload);
+                localStorage.setItem(completeKey, serializedData);
+                return true;
+            } catch (err) {
+                MV_APP.Utils.logDebug(`Storage Write Failure on key [${key}]: ${err.message}`, 'error');
+                return false;
+            }
+        },
+
+        /**
+         * Pulls and parses data objects securely from local cache allocations
+         */
+        readState: function (key, fallbackDefaultValue = null) {
+            if (!this.isLocalStorageAvailable()) return fallbackDefaultValue;
+            try {
+                const completeKey = this.config.storageKeyPrefix + key;
+                const activeRecord = localStorage.getItem(completeKey);
+                return activeRecord ? JSON.parse(activeRecord) : fallbackDefaultValue;
+            } catch (err) {
+                MV_APP.Utils.logDebug(`Storage Read Failure on key [${key}]: ${err.message}`, 'error');
+                return fallbackDefaultValue;
+            }
+        },
+
+        /**
+         * Deletes targeted tracking records from data storage allocations
+         */
+        clearState: function (key) {
+            if (!this.isLocalStorageAvailable()) return false;
+            const completeKey = this.config.storageKeyPrefix + key;
+            localStorage.removeItem(completeKey);
+            return true;
+        }
+    };
+
+    /**
+     * ------------------------------------------------------------------------
+     * STUDIO WORKFLOW HISTORY OPERATIONS (UNDO / REDO STRUCTURAL PIPELINES)
+     * ------------------------------------------------------------------------
+     */
+    MV_APP.Engine.WorkflowHistoryController = {
+        init: function () {
+            MV_APP.Utils.logDebug("Initializing Studio History Control Systems...", "info");
+            this.synchronizeSavedPreferencesOnLoad();
+            this.injectHistoryControlsUIElements();
+        },
+
+        synchronizeSavedPreferencesOnLoad: function () {
+            const preferencesCache = MV_APP.Storage.CacheManager.readState('user_settings');
+            if (preferencesCache) {
+                MV_APP.State.userPreferences = Object.assign({}, MV_APP.State.userPreferences, preferencesCache);
+                MV_APP.Utils.logDebug("User configuration preferences restored successfully from local registry records.", "info");
+            }
+        },
+
+        /**
+         * Adds action history state triggers programmatically to your layout editor panels
+         */
+        injectHistoryControlsUIElements: function () {
+            const workspaceContainer = document.querySelector('.generator-container');
+            if (!workspaceContainer) return;
+
+            const trackingControlPanel = document.createElement('div');
+            trackingControlPanel.id = 'mv-studio-history-action-bar';
+            Object.assign(trackingControlPanel.style, {
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '15px',
+                marginTop: '-10px'
+            });
+
+            trackingControlPanel.innerHTML = `
+                <button class="secondary-btn" id="mv-history-undo-btn" disabled style="padding:5px 12px; font-size:11px; border-radius:6px; opacity:0.3; cursor:not-allowed;">
+                    <i class="fa-solid fa-rotate-left"></i> Undo Step
+                </button>
+                <button class="secondary-btn" id="mv-history-redo-btn" disabled style="padding:5px 12px; font-size:11px; border-radius:6px; opacity:0.3; cursor:not-allowed;">
+                    <i class="fa-solid fa-rotate-right"></i> Redo Step
+                </button>
+                <span id="mv-history-status-indicator" style="font-size:11px; color:var(--gray); margin-left:auto; font-style:italic;">Workspace Clean</span>
+            `;
+
+            // Insert at the top of the generator functional configuration panel
+            const promptAreaInputNode = document.getElementById('promptBox');
+            if (promptAreaInputNode) {
+                promptAreaInputNode.parentNode.insertBefore(trackingControlPanel, promptAreaInputNode);
+            }
+
+            this.bindHistoryControllerListeners();
+        },
+
+        bindHistoryControllerListeners: function () {
+            const undoActionBtn = document.getElementById('mv-history-undo-btn');
+            const redoActionBtn = document.getElementById('mv-history-redo-btn');
+
+            if (undoActionBtn) {
+                undoActionBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.executeHistoryStepNavigation(-1);
+                });
+            }
+
+            if (redoActionBtn) {
+                redoActionBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.executeHistoryStepNavigation(1);
+                });
+            }
+        },
+
+        /**
+         * Updates history tracking indices, refreshing studio layouts with proper state historical objects
+         */
+        executeHistoryStepNavigation: function (directionIndexModifier) {
+            const prospectiveTargetIndex = MV_APP.State.historyIndex + directionIndexModifier;
+            
+            if (prospectiveTargetIndex < 0 || prospectiveTargetIndex >= MV_APP.State.studioHistory.length) {
+                return; // Guard statement protecting array bounds execution loops
+            }
+
+            MV_APP.State.historyIndex = prospectiveTargetIndex;
+            const historyStateRecord = MV_APP.State.studioHistory[prospectiveTargetIndex];
+
+            // Rehydrate the inputs area with retrieved contextual information
+            const promptTextBox = document.getElementById('promptBox');
+            if (promptTextBox && historyStateRecord) {
+                promptTextBox.value = historyStateRecord.prompt;
+            }
+
+            // Remanifest the Canvas display targets
+            const targetResultLayoutArea = document.getElementById('resultArea');
+            if (targetResultLayoutArea && historyStateRecord) {
+                MV_APP.Engine.GeneratorBridge.injectFinalizedMemeTemplateIntoDOM(
+                    targetResultLayoutArea,
+                    historyStateRecord.dataUrl,
+                    historyStateRecord.metadata,
+                    historyStateRecord.prompt
+                );
+            }
+
+            this.refreshHistoryControlButtonDisplayStates();
+        },
+
+        /**
+         * Refreshes DOM visual classes for studio undo/redo actions
+         */
+        refreshHistoryControlButtonDisplayStates: function () {
+            const undoBtn = document.getElementById('mv-history-undo-btn');
+            const redoBtn = document.getElementById('mv-history-redo-btn');
+            const indicatorLabel = document.getElementById('mv-history-status-indicator');
+
+            if (!undoBtn || !redoBtn) return;
+
+            const totalSavedSteps = MV_APP.State.studioHistory.length;
+            const currentPositionIndex = MV_APP.State.historyIndex;
+
+            // Update Undo Button Property States
+            if (currentPositionIndex > 0) {
+                undoBtn.disabled = false;
+                Object.assign(undoBtn.style, { opacity: '1', cursor: 'pointer' });
+            } else {
+                undoBtn.disabled = true;
+                Object.assign(undoBtn.style, { opacity: '0.3', cursor: 'not-allowed' });
+            }
+
+            // Update Redo Button Property States
+            if (currentPositionIndex < totalSavedSteps - 1 && totalSavedSteps > 0) {
+                redoBtn.disabled = false;
+                Object.assign(redoBtn.style, { opacity: '1', cursor: 'pointer' });
+            } else {
+                redoBtn.disabled = true;
+                Object.assign(redoBtn.style, { opacity: '0.3', cursor: 'not-allowed' });
+            }
+
+            // Render descriptive updates inside workspace label indicators
+            if (indicatorLabel) {
+                if (totalSavedSteps === 0) {
+                    indicatorLabel.textContent = "Workspace Clean";
+                } else {
+                    indicatorLabel.textContent = `Revision Level: ${currentPositionIndex + 1} / ${totalSavedSteps}`;
+                }
+            }
+        }
+    };
+
+    /**
+     * ------------------------------------------------------------------------
+     * ASYNCHRONOUS SERVER BACKEND LAYER (MOCK API WRAPPER)
+     * ------------------------------------------------------------------------
+     */
+    MV_APP.Engine.ApiServiceLayer = {
+        /**
+         * Mock post submission wrapper parsing analytics payloads to a simulated cloud endpoint
+         */
+        dispatchAsyncTelemetryPayload: function (endpointRoute, trackingObject, completionCallback) {
+            MV_APP.Utils.logDebug(`Streaming data package to virtual cloud node path: /api/v1/${endpointRoute}`, 'info');
+            
+            // Simulating basic network roundtrip transmission loops over server environments
+            setTimeout(() => {
+                const operationalSuccessRate = Math.random() > 0.02; // 98% operational reliability uptime
+                if (operationalSuccessRate) {
+                    completionCallback(null, { status: 200, executionMessage: "Transaction processed securely.", trackingReferenceId: `MVMX-${Math.floor(Math.random() * 899999 + 100000)}` });
+                } else {
+                    completionCallback(new Error("Network gateway response timeout limits exceeded."), null);
+                }
+            }, 750);
+        },
+
+        /**
+         * Simulates fetch request retrieval loops targeting standard cloud account verification templates
+         */
+        validateFakeUserAuthenticationSession: function (mockUserCredentials, targetFeedbackArea) {
+            if (!targetFeedbackArea) return;
+
+            targetFeedbackArea.innerHTML = `<span class="loading" style="width:14px; height:14px; border-width:2px;"></span> Validating credentials...`;
+
+            this.dispatchAsyncTelemetryPayload('auth/login', mockUserCredentials, (networkError, standardResponse) => {
+                if (networkError) {
+                    targetFeedbackArea.innerHTML = `<span style="color:var(--danger); font-size:12px;"><i class="fa-solid fa-circle-xmark"></i> Secure communication interrupted.</span>`;
+                    return;
+                }
+                
+                targetFeedbackArea.innerHTML = `<span style="color:var(--success); font-size:12px;"><i class="fa-solid fa-circle-check"></i> Session Verified! Refined Token: ${standardResponse.trackingReferenceId}</span>`;
+                
+                // Track security parameter authorizations locally inside global application states
+                MV_APP.State.userPreferences.authenticatedToken = standardResponse.trackingReferenceId;
+                MV_APP.Storage.CacheManager.saveState('user_settings', MV_APP.State.userPreferences);
+            });
+        }
+    };
+
+    // Override Part 2 hooks cleanly to intercept workflow streams and update history paths automatically
+    const legacyStudioPipelineTrigger = MV_APP.Engine.GeneratorBridge.executeGeneratorPipelineWorkflow;
+    if (legacyStudioPipelineTrigger) {
+        MV_APP.Engine.GeneratorBridge.executeGeneratorPipelineWorkflow = function () {
+            // Forward process loops directly into default legacy pipelines
+            legacyStudioPipelineTrigger.apply(this, arguments);
+            
+            // Re-sync UI representation indicators safely
+            setTimeout(() => {
+                MV_APP.Engine.WorkflowHistoryController.refreshHistoryControlButtonDisplayStates();
+            }, 2100); // Trigger evaluations immediately past the Canvas timeout loops
+        };
+    }
+
+    // Register module layers safely into global workspace architecture
+    global.MV_APP = MV_APP;
+
+})(window);
+
+/* ============================================================================
+   End of Part 4 - Persistent State & History Controller
+   Awaiting Part 5 Analytical Bootstrap Hook Directives...
+   ============================================================================ */
+                                              
