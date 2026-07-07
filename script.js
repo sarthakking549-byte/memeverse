@@ -1045,3 +1045,134 @@ Object.assign(MemeVerse,{
     }
 
 });
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 7 - Error Handling & Final Utilities
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    log(message){
+
+        console.log("[MemeVerse]",message);
+
+    },
+
+    safeExecute(callback){
+
+        try{
+
+            callback();
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+            this.toast("⚠️ Something went wrong.");
+
+        }
+
+    },
+
+    refresh(){
+
+        this.safeExecute(()=>{
+
+            this.cacheDOM();
+
+            this.bindEvents();
+
+            this.bindSearch();
+
+            this.bindFavorites();
+
+        });
+
+    },
+
+    clearPrompt(){
+
+        if(this.elements.promptBox){
+
+            this.elements.promptBox.value="";
+
+        }
+
+        if(this.elements.resultArea){
+
+            this.elements.resultArea.innerHTML="";
+
+        }
+
+        this.toast("🧹 Prompt Cleared");
+
+    },
+
+    exportFavorites(){
+
+        if(this.data.favorites.length===0){
+
+            this.toast("No favorites available");
+
+            return;
+
+        }
+
+        const blob=new Blob(
+
+            [
+
+                JSON.stringify(
+
+                    this.data.favorites,
+
+                    null,
+
+                    2
+
+                )
+
+            ],
+
+            {
+
+                type:"application/json"
+
+            }
+
+        );
+
+        const url=
+
+        URL.createObjectURL(blob);
+
+        const a=
+
+        document.createElement("a");
+
+        a.href=url;
+
+        a.download="favorites.json";
+
+        a.click();
+
+        URL.revokeObjectURL(url);
+
+    }
+
+});
+
+/*=========================================
+   FINAL STARTUP
+=========================================*/
+
+window.addEventListener("load",()=>{
+
+    MemeVerse.log("Application Loaded");
+
+    MemeVerse.toast("🚀 MemeVerse Ready!");
+
+});
