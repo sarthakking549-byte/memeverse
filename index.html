@@ -2,75 +2,158 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
 
-<title>MemeVerse AI</title>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="MemeVerse AI - Create, Explore and Share Original AI Generated Meme Templates">
+
+<meta name="keywords" content="AI Memes, Original Memes, Meme Generator, MemeVerse">
+
+<meta name="author" content="MemeVerse AI">
+
+<meta name="theme-color" content="#111827">
+
+<title>MemeVerse AI | Original AI Meme Studio</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
 
 <body>
 
-<header>
+<header class="header">
 
 <nav class="navbar">
 
 <div class="logo">
 
-<h1>MemeVerse AI</h1>
+<i class="fa-solid fa-face-laugh-beam"></i>
+
+<h2>MemeVerse AI</h2>
 
 </div>
 
-<ul class="nav-links">
+<ul class="nav-menu">
 
-<li><a href="#">Home</a></li>
+<li><a href="#home">Home</a></li>
 
-<li><a href="#">Explore</a></li>
+<li><a href="#explore">Explore</a></li>
 
-<li><a href="#">Trending</a></li>
+<li><a href="#templates">Templates</a></li>
 
-<li><a href="#">Categories</a></li>
+<li><a href="#generator">Generator</a></li>
 
-<li><a href="#">About</a></li>
+<li><a href="#trending">Trending</a></li>
+
+<li><a href="#about">About</a></li>
+
+<li><a href="#contact">Contact</a></li>
 
 </ul>
 
-<button class="login-btn">
+<div class="nav-buttons">
 
-Login
+<button class="login-btn">Login</button>
 
-</button>
+<button class="signup-btn">Sign Up</button>
+
+</div>
 
 </nav>
 
 </header>
 
-<section class="hero">
+<section id="home" class="hero">
 
-<div class="hero-content">
+<div class="hero-left">
 
-<h1>Create Original AI Meme Templates</h1>
+<h1>
+
+Create Original AI Meme Templates Instantly
+
+</h1>
 
 <p>
 
-Generate completely original meme-style images and captions using AI.
+Turn simple ideas into funny, original meme-style creations using AI. Discover fresh templates, customize captions, and share your creations with the world.
+
+</p>
+
+<div class="hero-buttons">
+
+<button class="primary-btn">
+
+Start Creating
+
+</button>
+
+<button class="secondary-btn">
+
+Explore Gallery
+
+</button>
+
+</div>
+
+</div>
+
+<div class="hero-right">
+
+<div class="hero-card">
+
+<h3>🔥 Today's Trending</h3>
+
+<p>
+
+More than 12,000 original meme creations generated today.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="search-section">
+
+<div class="search-container">
+
+<h2>
+
+Find Your Perfect Meme Template
+
+</h2>
+
+<p>
+
+Search thousands of original AI-ready templates.
 
 </p>
 
 <div class="search-box">
 
 <input
+
 type="text"
-placeholder="Search original meme templates...">
+
+placeholder="Search templates, emotions, situations..."
+
+id="searchInput">
 
 <button>
+
+<i class="fa-solid fa-magnifying-glass"></i>
 
 Search
 
@@ -82,53 +165,12 @@ Search
 
 </section>
 
-<section class="trending">
+<section id="templates" class="templates">
 
 <h2>
 
-🔥 Trending Original Templates
+Featured Templates
 
 </h2>
 
-<div class="meme-grid">
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=1" alt="Template 1">
-    <h3>Monday Energy</h3>
-    <p>When your alarm rings but your soul already called in sick.</p>
-    <button>Generate</button>
-</div>
-
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=2" alt="Template 2">
-    <h3>Exam Panic</h3>
-    <p>Studying five minutes before the exam like it's a superpower.</p>
-    <button>Generate</button>
-</div>
-
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=3" alt="Template 3">
-    <h3>Battery 1%</h3>
-    <p>Walking to the charger like it's a life-or-death mission.</p>
-    <button>Generate</button>
-</div>
-
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=4" alt="Template 4">
-    <h3>Wi-Fi Gone</h3>
-    <p>The entire family suddenly remembers each other exists.</p>
-    <button>Generate</button>
-</div>
-
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=5" alt="Template 5">
-    <h3>Salary Day</h3>
-    <p>Rich for exactly three hours.</p>
-    <button>Generate</button>
-</div>
-
-<div class="meme-card">
-    <img src="https://picsum.photos/400/300?random=6" alt="Template 6">
-    <h3>Gym Tomorrow</h3>
-    <p>Tomorrow has been coming for six months.</p>
-    <button>Generate</button>
-</div>
+<div class="template-grid">
