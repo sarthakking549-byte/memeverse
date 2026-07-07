@@ -529,5 +529,183 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("🚀 Welcome to MemeVerse AI!");
 
     },1000);
+/* =====================================================
+   MemeVerse AI
+   script.js - Part 4 (Final)
+===================================================== */
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* -------------------------------
+       Dark / Light Mode
+    -------------------------------- */
+
+    const modeBtn = document.createElement("button");
+
+    modeBtn.innerHTML = "🌙";
+
+    modeBtn.className = "theme-toggle";
+
+    document.body.appendChild(modeBtn);
+
+    modeBtn.style.cssText = `
+        position:fixed;
+        bottom:100px;
+        right:30px;
+        width:55px;
+        height:55px;
+        border-radius:50%;
+        border:none;
+        background:linear-gradient(135deg,#6C63FF,#00E5FF);
+        color:white;
+        font-size:22px;
+        cursor:pointer;
+        z-index:9999;
+        box-shadow:0 15px 35px rgba(0,0,0,.3);
+    `;
+
+    let darkMode = true;
+
+    modeBtn.addEventListener("click",()=>{
+
+        if(darkMode){
+
+            document.body.style.background="#F5F7FA";
+            document.body.style.color="#111827";
+            modeBtn.innerHTML="☀️";
+
+        }else{
+
+            document.body.style.background="";
+            document.body.style.color="white";
+            modeBtn.innerHTML="🌙";
+
+        }
+
+        darkMode=!darkMode;
+
+    });
+
+    /* -------------------------------
+       Local Visitor Counter
+    -------------------------------- */
+
+    let visits = localStorage.getItem("memeverse_visits");
+
+    if(!visits){
+
+        visits = 1;
+
+    }else{
+
+        visits = Number(visits)+1;
+
+    }
+
+    localStorage.setItem("memeverse_visits",visits);
+
+    console.log("Visitor Count:",visits);
+
+    /* -------------------------------
+       Random Featured Card
+    -------------------------------- */
+
+    const cards=document.querySelectorAll(".template-card");
+
+    if(cards.length){
+
+        const random=Math.floor(Math.random()*cards.length);
+
+        cards[random].style.border="2px solid #00E5FF";
+
+        cards[random].style.boxShadow="0 0 35px rgba(0,229,255,.4)";
+
+    }
+
+    /* -------------------------------
+       Ripple Effect
+    -------------------------------- */
+
+    document.querySelectorAll("button").forEach(btn=>{
+
+        btn.addEventListener("click",function(e){
+
+            const circle=document.createElement("span");
+
+            const d=Math.max(this.clientWidth,this.clientHeight);
+
+            circle.style.width=d+"px";
+            circle.style.height=d+"px";
+
+            circle.style.position="absolute";
+            circle.style.borderRadius="50%";
+            circle.style.background="rgba(255,255,255,.35)";
+            circle.style.left=(e.offsetX-d/2)+"px";
+            circle.style.top=(e.offsetY-d/2)+"px";
+            circle.style.pointerEvents="none";
+            circle.style.animation="ripple .6s linear";
+
+            this.style.position="relative";
+            this.style.overflow="hidden";
+
+            this.appendChild(circle);
+
+            setTimeout(()=>{
+
+                circle.remove();
+
+            },600);
+
+        });
+
+    });
+
+    const style=document.createElement("style");
+
+    style.innerHTML=`
+    @keyframes ripple{
+        from{
+            transform:scale(0);
+            opacity:.8;
+        }
+        to{
+            transform:scale(4);
+            opacity:0;
+        }
+    }
+    `;
+
+    document.head.appendChild(style);
+
+    /* -------------------------------
+       Greeting Based on Time
+    -------------------------------- */
+
+    const hour=new Date().getHours();
+
+    let greeting="Welcome to MemeVerse AI!";
+
+    if(hour<12){
+
+        greeting="🌅 Good Morning!";
+
+    }else if(hour<18){
+
+        greeting="☀️ Good Afternoon!";
+
+    }else{
+
+        greeting="🌙 Good Evening!";
+
+    }
+
+    console.log(greeting);
+
+    /* -------------------------------
+       Finish
+    -------------------------------- */
+
+    console.log("✅ MemeVerse AI Loaded Successfully");
+
+});
 });
