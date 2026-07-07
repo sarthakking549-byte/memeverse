@@ -375,3 +375,201 @@ generateMeme();
 }
 
 });
+/*=========================================================
+  MemeVerse AI
+  JavaScript Part 3
+=========================================================*/
+
+/*=========================================
+  STICKY NAVBAR
+=========================================*/
+
+window.addEventListener("scroll",()=>{
+
+if(window.scrollY>80){
+
+navbar.classList.add("scrolled");
+
+}else{
+
+navbar.classList.remove("scrolled");
+
+}
+
+});
+
+/*=========================================
+  SCROLL ANIMATIONS
+=========================================*/
+
+const animatedItems=document.querySelectorAll(
+
+".template-card,.category-card,.feature-card,.trend-card,.about-box,.faq-item,.community-content,.contact-wrapper"
+
+);
+
+const observer=new IntersectionObserver(
+
+(entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("fade-in");
+
+entry.target.classList.add("slide-up");
+
+}
+
+});
+
+},
+
+{
+
+threshold:0.15
+
+}
+
+);
+
+animatedItems.forEach(item=>{
+
+observer.observe(item);
+
+});
+
+/*=========================================
+  MOBILE MENU
+=========================================*/
+
+const menuToggle=document.querySelector(".menu-toggle");
+
+const navMenu=document.querySelector(".nav-menu");
+
+if(menuToggle && navMenu){
+
+menuToggle.addEventListener("click",()=>{
+
+navMenu.classList.toggle("active");
+
+});
+
+}
+
+/*=========================================
+  SMOOTH NAVIGATION
+=========================================*/
+
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+
+link.addEventListener("click",(e)=>{
+
+e.preventDefault();
+
+const target=document.querySelector(
+
+link.getAttribute("href")
+
+);
+
+if(target){
+
+target.scrollIntoView({
+
+behavior:"smooth",
+
+block:"start"
+
+});
+
+}
+
+});
+
+});
+
+/*=========================================
+  BACK TO TOP BUTTON
+=========================================*/
+
+const topButton=document.createElement("button");
+
+topButton.innerHTML="⬆";
+
+topButton.id="topButton";
+
+document.body.appendChild(topButton);
+
+window.addEventListener("scroll",()=>{
+
+if(window.scrollY>500){
+
+topButton.classList.add("show");
+
+}else{
+
+topButton.classList.remove("show");
+
+}
+
+});
+
+topButton.addEventListener("click",()=>{
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+});
+
+/*=========================================
+  BUTTON RIPPLE EFFECT
+=========================================*/
+
+document.querySelectorAll("button").forEach(button=>{
+
+button.addEventListener("click",(e)=>{
+
+const ripple=document.createElement("span");
+
+const rect=button.getBoundingClientRect();
+
+const size=Math.max(rect.width,rect.height);
+
+ripple.style.width=size+"px";
+
+ripple.style.height=size+"px";
+
+ripple.style.left=e.clientX-rect.left-size/2+"px";
+
+ripple.style.top=e.clientY-rect.top-size/2+"px";
+
+ripple.className="ripple";
+
+button.appendChild(ripple);
+
+setTimeout(()=>{
+
+ripple.remove();
+
+},600);
+
+});
+
+});
+
+/*=========================================
+  PAGE LOADED
+=========================================*/
+
+window.addEventListener("load",()=>{
+
+showToast("🚀 MemeVerse AI Ready!");
+
+});
