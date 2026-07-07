@@ -1383,3 +1383,157 @@ margin-bottom:25px;
 font-size:18px;
 
 margin-bottom
+/* ======================================================
+   RESPONSIVE DESIGN
+====================================================== */
+
+/* Large Tablets */
+
+@media(max-width:1200px){
+
+.hero{
+
+padding:70px 30px;
+
+gap:40px;
+
+}
+
+.hero-left h1{
+
+font-size:56px;
+
+}
+
+.templates,
+.categories,
+.features,
+.community,
+.contact,
+.about{
+
+padding-left:30px;
+
+padding-right:30px;
+
+}
+
+}
+
+
+/* Tablets */
+
+@media(max-width:900px){
+
+.navbar{
+
+padding:18px 25px;
+
+}
+
+.hero{
+
+grid-template-columns:1fr;
+
+text-align:center;
+
+}
+
+.hero-left{
+
+align-items:center;
+
+}
+
+.hero-right{
+
+margin-top:30px;
+
+}
+
+.contact-wrapper{
+
+grid-template-columns:1fr;
+
+}
+
+.about{
+
+grid-template-columns:1fr;
+
+}
+
+.about-right{
+
+margin-top:30px;
+
+}
+
+}
+
+
+/* Mobile */
+
+@media(max-width:600px){
+
+.header{
+
+position:relative;
+
+}
+
+.navbar{
+
+padding:15px;
+
+}
+
+.hero{
+
+padding:50px 20px;
+
+min-height:auto;
+
+}
+
+.hero-left h1{
+
+font-size:38px;
+
+}
+
+.hero-left p{
+
+font-size:16px;
+
+}
+
+.hero-buttons{
+
+width:100%;
+
+}
+
+.primary-btn,
+.secondary-btn{
+
+width:100%;
+
+}
+
+.hero-card{
+
+padding:30px 20px;
+
+}
+
+.search-container{
+
+padding:30px 20px;
+
+}
+
+.search-container h2,
+.templates h2,
+.section-title h2,
+.community-content h2,
