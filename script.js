@@ -402,3 +402,170 @@ Object.assign(MemeVerse,{
     }
 
 });
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 3 - Search & Favorites
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    search(query){
+
+        query=query.toLowerCase().trim();
+
+        this.elements.templateCards.forEach(card=>{
+
+            const text=card.innerText.toLowerCase();
+
+            card.style.display=text.includes(query)?"":"none";
+
+        });
+
+    },
+
+    addFavorite(title){
+
+        if(this.data.favorites.includes(title)){
+
+            this.toast("❤️ Already in Favorites");
+
+            return;
+
+        }
+
+        this.data.favorites.push(title);
+
+        this.saveStorage();
+
+        this.toast("❤️ Added to Favorites");
+
+    },
+
+    removeFavorite(title){
+
+        this.data.favorites=
+
+        this.data.favorites.filter(
+
+            item=>item!==title
+
+        );
+
+        this.saveStorage();
+
+        this.toast("🗑️ Removed from Favorites");
+
+    },
+
+    clearFavorites(){
+
+        this.data.favorites=[];
+
+        this.saveStorage();
+
+        this.toast("🧹 Favorites Cleared");
+
+    },
+
+    bindSearch(){
+
+        if(this.elements.searchInput){
+
+            this.elements.searchInput.addEventListener(
+
+                "input",
+
+                (e)=>{
+
+                    this.search(e.target.value);
+
+                }
+
+            );
+
+        }
+
+        if(this.elements.searchBtn){
+
+            this.elements.searchBtn.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    const value=
+
+                    this.elements.searchInput ?
+
+                    this.elements.searchInput.value :
+
+                    "";
+
+                    this.search(value);
+
+                }
+
+            );
+
+        }
+
+    },
+
+    bindFavorites(){
+
+        this.elements.generateButtons.forEach(button=>{
+
+            button.addEventListener(
+
+                "contextmenu",
+
+                (e)=>{
+
+                    e.preventDefault();
+
+                    const card=
+
+                    button.closest(".template-card");
+
+                    if(!card) return;
+
+                    const title=
+
+                    card.querySelector("h3") ?
+
+                    card.querySelector("h3").innerText :
+
+                    "Unknown";
+
+                    this.addFavorite(title);
+
+                }
+
+            );
+
+        });
+
+    }
+
+});
+
+/*=========================================
+    EXTEND STARTUP
+=========================================*/
+
+const oldStart=MemeVerse.start.bind(MemeVerse);
+
+MemeVerse.start=function(){
+
+    oldStart();
+
+    this.bindSearch();
+
+    this.bindFavorites();
+
+    console.log("✅ Search Ready");
+
+    console.log("✅ Favorites Ready");
+
+};
