@@ -218,3 +218,187 @@ document.addEventListener(
     }
 
 );
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 2 - Meme Generator
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    randomPrompt(){
+
+        const list=this.data.prompts;
+
+        const random=list[
+            Math.floor(Math.random()*list.length)
+        ];
+
+        if(this.elements.promptBox){
+
+            this.elements.promptBox.value=random;
+
+        }
+
+        this.toast("🎲 Random prompt selected");
+
+    },
+
+    generate(){
+
+        if(!this.elements.resultArea) return;
+
+        let prompt="";
+
+        if(
+            this.elements.promptBox &&
+            this.elements.promptBox.value.trim()!==""
+        ){
+
+            prompt=this.elements.promptBox.value.trim();
+
+        }else{
+
+            prompt=this.data.prompts[
+                Math.floor(
+                    Math.random()*this.data.prompts.length
+                )
+            ];
+
+        }
+
+        this.loading();
+
+        setTimeout(()=>{
+
+            this.showResult(prompt);
+
+        },1500);
+
+    },
+
+    showResult(prompt){
+
+        const time=new Date().toLocaleTimeString();
+
+        this.elements.resultArea.innerHTML=`
+
+            <div class="generated-card">
+
+                <h2>🤖 AI Meme Generated</h2>
+
+                <p class="generated-text">
+
+                    ${prompt}
+
+                </p>
+
+                <small>
+
+                    Generated at ${time}
+
+                </small>
+
+                <br><br>
+
+                <button id="copyResult">
+
+                    📋 Copy
+
+                </button>
+
+            </div>
+
+        `;
+
+        const copyButton=
+
+        document.querySelector("#copyResult");
+
+        if(copyButton){
+
+            copyButton.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    navigator.clipboard.writeText(prompt);
+
+                    this.toast("📋 Copied!");
+
+                }
+
+            );
+
+        }
+
+    },
+
+    preview(button){
+
+        const card=
+
+        button.closest(".template-card");
+
+        if(!card){
+
+            this.toast("Preview unavailable");
+
+            return;
+
+        }
+
+        const title=
+
+        card.querySelector("h3") ?
+
+        card.querySelector("h3").innerText :
+
+        "Template";
+
+        this.toast("👀 Preview : "+title);
+
+    },
+
+    toast(message){
+
+        let toast=
+
+        document.querySelector(".mv-toast");
+
+        if(toast){
+
+            toast.remove();
+
+        }
+
+        toast=document.createElement("div");
+
+        toast.className="mv-toast";
+
+        toast.textContent=message;
+
+        document.body.appendChild(toast);
+
+        requestAnimationFrame(()=>{
+
+            toast.classList.add("show");
+
+        });
+
+        setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+            setTimeout(()=>{
+
+                toast.remove();
+
+            },300);
+
+        },2200);
+
+    }
+
+});
