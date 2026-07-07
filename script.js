@@ -929,3 +929,150 @@ MemeVerse.start=function(){
     console.log("✅ UI Enhancements Ready");
 
 };
+/*=========================================================
+    MemeVerse AI
+    Professional Script
+    Part 6 - Performance & Utilities
+=========================================================*/
+
+Object.assign(MemeVerse,{
+
+    initUtilities(){
+
+        this.lazyImages();
+
+        this.autoPrompt();
+
+        this.initShare();
+
+        this.preloadImages();
+
+    },
+
+    /*=====================================
+      Lazy Image Loading
+    =====================================*/
+
+    lazyImages(){
+
+        const images=document.querySelectorAll("img[data-src]");
+
+        if(images.length===0) return;
+
+        const observer=new IntersectionObserver(entries=>{
+
+            entries.forEach(entry=>{
+
+                if(!entry.isIntersecting) return;
+
+                const img=entry.target;
+
+                img.src=img.dataset.src;
+
+                img.removeAttribute("data-src");
+
+                observer.unobserve(img);
+
+            });
+
+        });
+
+        images.forEach(img=>observer.observe(img));
+
+    },
+
+    /*=====================================
+      Auto Prompt
+    =====================================*/
+
+    autoPrompt(){
+
+        if(!this.elements.promptBox) return;
+
+        setInterval(()=>{
+
+            if(this.elements.promptBox.value.trim()!=="") return;
+
+            const random=
+
+            this.data.prompts[
+
+                Math.floor(
+
+                    Math.random()*this.data.prompts.length
+
+                )
+
+            ];
+
+            this.elements.promptBox.placeholder=
+
+            "Example: "+random;
+
+        },5000);
+
+    },
+
+    /*=====================================
+      Share Result
+    =====================================*/
+
+    initShare(){
+
+        document.addEventListener("click",(e)=>{
+
+            if(e.target.id!=="shareResult") return;
+
+            const text=
+
+            this.elements.resultArea?
+
+            this.elements.resultArea.innerText:
+
+            "";
+
+            if(navigator.share){
+
+                navigator.share({
+
+                    title:"MemeVerse AI",
+
+                    text:text
+
+                });
+
+            }else{
+
+                navigator.clipboard.writeText(text);
+
+                this.toast(
+
+                    "📋 Share not supported. Copied instead."
+
+                );
+
+            }
+
+        });
+
+    },
+
+    /*=====================================
+      Preload Images
+    =====================================*/
+
+    preloadImages(){
+
+        document.querySelectorAll("img").forEach(img=>{
+
+            if(img.complete) return;
+
+            img.loading="lazy";
+
+            img.decoding="async";
+
+        });
+
+    }
+
+});
