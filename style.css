@@ -1332,3 +1332,54 @@ background:rgba(255,255,255,.05);
 border-radius:22px;
 
 transition
+/* ======================================================
+   CONTACT SECTION
+====================================================== */
+
+.contact{
+
+max-width:1400px;
+
+margin:auto;
+
+padding:100px 40px;
+
+}
+
+.contact-wrapper{
+
+display:grid;
+
+grid-template-columns:1fr 1.2fr;
+
+gap:50px;
+
+margin-top:50px;
+
+}
+
+.contact-info{
+
+padding:40px;
+
+background:rgba(255,255,255,.05);
+
+border-radius:25px;
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+.contact-info h3{
+
+font-size:32px;
+
+margin-bottom:25px;
+
+}
+
+.contact-info p{
+
+font-size:18px;
+
+margin-bottom
