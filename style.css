@@ -1,1 +1,192 @@
+/* =======================================================
+   MemeVerse AI - Premium Stylesheet
+   Part 1
+======================================================= */
 
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Reset */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+/* Variables */
+
+:root{
+
+    --primary:#6C63FF;
+    --secondary:#8B5CF6;
+    --accent:#00E5FF;
+
+    --dark:#0B0F19;
+    --dark2:#111827;
+
+    --white:#FFFFFF;
+    --gray:#C7D2FE;
+    --light:#F3F4F6;
+
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    --radius:18px;
+
+    --transition:.35s ease;
+
+    --shadow:
+    0 15px 40px rgba(0,0,0,.35);
+
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:linear-gradient(
+        180deg,
+        var(--primary),
+        var(--accent)
+    );
+
+    border-radius:20px;
+
+}
+
+/* Body */
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:
+    linear-gradient(
+    135deg,
+    #0B0F19,
+    #151B2D,
+    #101522);
+
+    color:white;
+
+    overflow-x:hidden;
+
+    min-height:100vh;
+
+}
+
+/* Animated Background */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+top:-50%;
+
+left:-50%;
+
+width:200%;
+
+height:200%;
+
+background:
+
+radial-gradient(circle,
+rgba(108,99,255,.16),
+transparent 40%),
+
+radial-gradient(circle,
+rgba(0,229,255,.12),
+transparent 42%),
+
+radial-gradient(circle,
+rgba(139,92,246,.12),
+transparent 38%);
+
+animation:
+
+backgroundMove 24s linear infinite;
+
+z-index:-2;
+
+}
+
+@keyframes backgroundMove{
+
+0%{
+
+transform:
+rotate(0deg)
+scale(1);
+
+}
+
+100%{
+
+transform:
+rotate(360deg)
+scale(1.25);
+
+}
+
+}
+
+/* Links */
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+}
+
+/* Images */
+
+img{
+
+width:100%;
+
+display:block;
+
+}
+
+/* Buttons */
+
+button{
+
+cursor:pointer;
+
+border:none;
+
+font-family:'Poppins',sans-serif;
+
+transition:var(--transition);
+
+}
+
+/* Inputs */
+
+input,
+textarea{
+
+font-family:'Poppins',sans-serif;
+
+outline:none;
+
+border:none;
+
+}
