@@ -142,15 +142,35 @@ const MemeVerse = {
 
     },
 
-    start(){
+start(){
 
-        console.log(
+    console.log("🚀 MemeVerse AI Started");
 
-            "🚀 MemeVerse AI Started"
+    this.bindSearch();
 
-        );
+    this.bindFavorites();
 
-    },
+    this.initNavbar();
+
+    this.initMobileMenu();
+
+    this.smoothScroll();
+
+    this.createBackToTop();
+
+    this.rippleEffect();
+
+    this.initDarkMode();
+
+    this.revealOnScroll();
+
+    this.keyboardShortcuts();
+
+    this.sessionCounter();
+
+    this.initUtilities();
+
+},
 
     loadStorage(){
 
